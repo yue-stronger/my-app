@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TestController {
+public class UserController {
 
     private Map<String, UserInfo> map = new HashMap<String, UserInfo>();
 
@@ -31,7 +31,6 @@ public class TestController {
         String token = uuid.toString();
 
         Cookie cookie = new Cookie("token", token);
-//        token.setDomain("/");
         cookie.setPath("/");
         cookie.setMaxAge(3600);
         response.addCookie(cookie);
@@ -40,10 +39,31 @@ public class TestController {
         info.setName("Serati Ma");
         info.setAvatar("https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png");
         info.setUserid(token);
+        info.setAccess("admin");
 
         map.put(token, info);
 
         return "{\"status\":\"ok\",\"type\":\"account\",\"currentAuthority\":\"admin\"}";
+    }
+
+    @PostMapping("/api/login/outLogin")
+    public String outLogin(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", false);
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("token".equals(cookie.getName())) {
+                String token = cookie.getValue();
+                map.remove(token);
+
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+
+        result.put("success", true);
+        return JSON.toJSONString(result);
     }
 
     @GetMapping("/api/currentUser")
@@ -54,16 +74,18 @@ public class TestController {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if ("token".equals(cookie.getName())) {
-                System.out.println(cookie.getName() + ":" + cookie.getValue());
-            }
-            String token = cookie.getValue();
-            UserInfo info = map.get(token);
-            if (Objects.nonNull(info)) {
-                result.put("success", true);
-                result.put("data", info);
+                String token = cookie.getValue();
+                UserInfo info = map.get(token);
+                if (Objects.nonNull(info)) {
+                    result.put("success", true);
+                    result.put("data", info);
+                    return JSON.toJSONString(result);
+                }
             }
         }
 
+        result.put("errorCode", "100403");
+        result.put("errorMessage", "请重新登陆");
         return JSON.toJSONString(result);
 
 //        Map<String, Object> map = new HashMap<String, Object>();

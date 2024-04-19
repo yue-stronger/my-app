@@ -19,5 +19,6 @@ public class UserInfo {
     private String country;
     private String address;
     private String phone;
+    private String access;
 
 }
