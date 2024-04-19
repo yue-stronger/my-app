@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
-    @RequestMapping("/test")
-    public String test() {
-        return "hello test";
+    @RequestMapping("/api/demo1")
+    public String demo1() {
+        return "hello demo1";
+    }
+
+    @RequestMapping("/demo2")
+    public String demo2() {
+        return "hello demo2";
     }
 }

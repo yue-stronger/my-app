@@ -1,18 +1,13 @@
 package com.mk.app.backend.business.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DemoController {
+public class IndexController {
 
-    @RequestMapping("/api/demo1")
-    public String demo1() {
+//    @RequestMapping("/user/login")
+    public String index() {
         return "hello demo1";
     }
 
-    @RequestMapping("/demo2")
-    public String demo2() {
-        return "hello demo2";
-    }
 }
