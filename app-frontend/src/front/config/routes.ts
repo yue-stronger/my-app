@@ -56,6 +56,12 @@ export default [
     redirect: '/welcome',
   },
   {
+    // name: 'test',
+    // icon: 'table',
+    path: '/test',
+    component: './Test',
+   },
+  {
     path: '*',
     layout: false,
     component: './404',
